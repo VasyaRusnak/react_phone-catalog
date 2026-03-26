@@ -2,6 +2,8 @@ import React from 'react';
 import './Contacts.scss';
 
 export const Contacts: React.FC = () => {
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <div className="contacts">
       <h1 className="contacts__title">React Developer</h1>
@@ -9,9 +11,10 @@ export const Contacts: React.FC = () => {
       <div className="contacts__container">
         <div className="developer-card">
           <div className="developer-card__image-container">
+            {/* Додали baseUrl */}
             <img
-              src="/img/img.png"
-              alt="Rostyslav Tkachuk"
+              src={`${baseUrl}img/img.png`}
+              alt="Rusnak Vasyl"
               className="developer-card__photo"
             />
           </div>

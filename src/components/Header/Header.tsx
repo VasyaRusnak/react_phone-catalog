@@ -3,6 +3,9 @@ import { Page } from '../../App';
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
+// 1. ІМПОРТУЄМО ЛОГОТИП (з папки src, тобто на 2 рівні вище)
+import logo from '../../Logo.png';
+
 type Props = {
   page?: Page;
   setPage?: (page: Page) => void;
@@ -11,6 +14,9 @@ type Props = {
 export const Header: React.FC<Props> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+
+  // Додаємо базу для GitHub Pages (для іконок кошика/серця в SCSS)
+  const baseUrl = import.meta.env.BASE_URL;
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -28,7 +34,8 @@ export const Header: React.FC<Props> = () => {
         {/* ЛІВА ЧАСТИНА: Логотип і меню */}
         <div className="header__nav__items">
           <NavLink to="/" className="header__nav__logo">
-            <img src="/src/Logo.png" alt="logo" />
+            {/* 2. ВИКОРИСТОВУЄМО ІМПОРТОВАНУ ЗМІННУ logo */}
+            <img src={logo} alt="logo" />
           </NavLink>
 
           <NavLink to="/" className="header__nav__items__item">

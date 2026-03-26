@@ -2,13 +2,20 @@ import { FC } from 'react';
 import './Footer.scss';
 import { NavLink } from 'react-router-dom';
 
+// 1. Імпортуємо логотип так само, як у хедері
+import logo from '../../Logo.png';
+
 export const Footer: FC = () => {
+  // База потрібна нам для іконки стрілочки "Back to top", бо вона лежить у public
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <div className="footer">
       <div className="footer__content">
         <div className="footer__logo">
           <a href="#">
-            <img src="/src/Logo.png" alt={'logo'} />
+            {/* 2. Замінюємо шлях на змінну logo */}
+            <img src={logo} alt="logo" />
           </a>
         </div>
         <div className="footer__items">
@@ -34,8 +41,9 @@ export const Footer: FC = () => {
         <div className="footer__back">
           <a className="footer__back__text" href="#">
             Back to top
+            {/* Іконка стрілочки залишається через baseUrl, бо вона лежить в public/img/... */}
             <img
-              src="/img/icons/Slider button - Default (right).png"
+              src={`${baseUrl}img/icons/Slider button - Default (right).png`}
               alt="back icon"
             />
           </a>

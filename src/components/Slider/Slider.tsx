@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import './Slider.scss';
 
+// Прибрали /public/ і перший слеш з масиву шляхів
 const images = [
-  '/public/img/icons/Banner (1).png',
-  '/public/img/icons/img.png',
-  '/public/img/banner-phones.png',
+  'img/icons/Banner (1).png',
+  'img/icons/img.png',
+  'img/banner-phones.png', // Перевір, чи є цей файл у папці public/img/
 ];
 
 export const Slider = () => {
   const [index, setIndex] = useState(0);
+  const baseUrl = import.meta.env.BASE_URL;
 
   const prev = () => {
     setIndex(i => (i === 0 ? images.length - 1 : i - 1));
@@ -30,8 +32,9 @@ export const Slider = () => {
           className="slider__track"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
-          {images.map(src => (
-            <img key={src} src={src} className="slider__image" />
+          {images.map((src, i) => (
+            // Підставляємо baseUrl динамічно під час рендеру
+            <img key={i} src={`${baseUrl}${src}`} className="slider__image" alt={`Slide ${i}`} />
           ))}
         </div>
       </div>

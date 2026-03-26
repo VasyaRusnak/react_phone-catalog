@@ -32,19 +32,25 @@ export const CardHP: FC<Props> = ({ product }) => {
   // Шлях до сторінки опису, наприклад: /phones/apple-iphone-13
   const productPath = `/${product.category}/${product.itemId}`;
 
+  // Магія Vite для GitHub Pages (щоб картинки не ламалися)
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <article className="product-card">
-      {/* ЛІНК ОБГОРТАЄ КАРТИНКУ ТА НАЗВУ */}
+      {/* ЛІНК ТЕПЕР ОБГОРТАЄ І КАРТИНКУ, І НАЗВУ */}
       <Link
         to={productPath}
         className="product-card__link"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         <div className="product-card__image">
-          <img src={`/${product.image}`} alt={product.name} />
+          {/* Додали baseUrl до картинки товару */}
+          <img src={`${baseUrl}${product.image}`} alt={product.name} />
         </div>
       </Link>
-      <h2 className="product-card__title">{product.name}</h2>
+
+        {/* Назва тепер всередині лінка і буде клікабельною! */}
+        <h2 className="product-card__title">{product.name}</h2>
 
       <div className="product-card__prices">
         <span className="product-card__price">${product.price}</span>
@@ -82,12 +88,13 @@ export const CardHP: FC<Props> = ({ product }) => {
           className="product-card__fav"
           onClick={() => addToFav(product)}
         >
+          {/* Додали baseUrl до іконок сердечка */}
           <img
             className="product-card__fav__icon"
             src={
               isFav
-                ? '/img/icons/Favourites Filled (Heart Like).png'
-                : '/img/icons/Favourites (Heart Like).png'
+                ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
+                : `${baseUrl}img/icons/Favourites (Heart Like).png`
             }
             alt="Fav icon"
           />

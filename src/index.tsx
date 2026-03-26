@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+// 1. ЗАМІНЮЄМО BrowserRouter на HashRouter
+import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    {/* ДОДАЄМО BASENAME СЮДИ */}
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    {/* 2. Обгортаємо App у HashRouter (тут basename вже не потрібен!) */}
+    <HashRouter>
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );

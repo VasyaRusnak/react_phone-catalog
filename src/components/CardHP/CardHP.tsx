@@ -1,0 +1,98 @@
+import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../Cart/CartContext';
+import { useFavourites } from '../FavouritesPage/FavouritesContext';
+import './CardHP.scss';
+
+// Використовуємо твій інтерфейс Product або розширюємо локальний
+interface Product {
+  id: number;
+  itemId: string; // Важливо для маршруту
+  name: string;
+  fullPrice: number;
+  price: number;
+  screen: string;
+  capacity: string;
+  ram: string;
+  image: string;
+  category: string;
+}
+
+type Props = {
+  product: Product;
+};
+
+export const CardHP: FC<Props> = ({ product }) => {
+  const { cart, addToCart } = useCart();
+  const { favourites, addToFav } = useFavourites();
+
+  const isFav = favourites.some(fav => fav.id === product.id);
+  const isAdded = cart.some(item => item.id === product.id);
+
+  // Шлях до сторінки опису, наприклад: /phones/apple-iphone-13
+  const productPath = `/${product.category}/${product.itemId}`;
+
+  return (
+    <article className="product-card">
+      {/* ЛІНК ОБГОРТАЄ КАРТИНКУ ТА НАЗВУ */}
+      <Link
+        to={productPath}
+        className="product-card__link"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <div className="product-card__image">
+          <img src={`/${product.image}`} alt={product.name} />
+        </div>
+      </Link>
+      <h2 className="product-card__title">{product.name}</h2>
+
+      <div className="product-card__prices">
+        <span className="product-card__price">${product.price}</span>
+        <span className="product-card__full-price">${product.fullPrice}</span>
+      </div>
+
+      <div className="product-card__divider" />
+
+      <ul className="product-card__specs">
+        {[
+          ['Screen', product.screen],
+          ['Capacity', product.capacity],
+          ['RAM', product.ram],
+        ].map(([label, value]) => (
+          <li key={label} className="product-card__specs__spec">
+            <span className="product-card__specs__spec__name">{label}</span>
+            <span className="product-card__specs__spec__value">{value}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="product-card__actions">
+        <button
+          type="button"
+          onClick={() => addToCart({ ...product, quantity: 1 })}
+          className={`product-card__add ${
+            isAdded ? 'product-card__add--active' : ''
+          }`}
+        >
+          {isAdded ? 'Added' : 'Add to cart'}
+        </button>
+
+        <button
+          type="button"
+          className="product-card__fav"
+          onClick={() => addToFav(product)}
+        >
+          <img
+            className="product-card__fav__icon"
+            src={
+              isFav
+                ? '/img/icons/Favourites Filled (Heart Like).png'
+                : '/img/icons/Favourites (Heart Like).png'
+            }
+            alt="Fav icon"
+          />
+        </button>
+      </div>
+    </article>
+  );
+};

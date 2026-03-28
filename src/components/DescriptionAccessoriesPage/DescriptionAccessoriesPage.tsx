@@ -57,7 +57,7 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
 
   // ЗАВАНТАЖЕННЯ ДАНИХ (додано baseUrl)
   useEffect(() => {
-    fetch(`${baseUrl}api/accessories.json`)
+    fetch(`${baseUrl}/api/accessories.json`)
       .then(res => res.json())
       .then(data => {
         setAccessories(data);

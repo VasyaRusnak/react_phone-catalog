@@ -56,7 +56,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
 
   // 1. Завантаження даних (додано baseUrl)
   useEffect(() => {
-    fetch(`${baseUrl}api/tablets.json`)
+    fetch(`${baseUrl}/api/tablets.json`)
       .then(res => res.json())
       .then(data => {
         setTablets(data);

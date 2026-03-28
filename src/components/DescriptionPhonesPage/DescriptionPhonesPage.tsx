@@ -55,16 +55,22 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // ЗАВАНТАЖЕННЯ ДАНИХ ЧЕРЕЗ FETCH
+  // Змінна для правильних шляхів на GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL;
+
+  // ЗАВАНТАЖЕННЯ ДАНИХ ЧЕРЕЗ FETCH (Тепер з baseUrl!)
   useEffect(() => {
-    fetch('/api/phones.json')
+    fetch(`${baseUrl}/api/phones.json`)
       .then(res => res.json())
       .then(data => {
         setPhones(data);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, []);
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        setLoading(false);
+      });
+  }, [baseUrl]);
 
   const findPhone = phones.find(p => p.id === productId);
   const simpleInfo = productsData.find(p => p.itemId === productId);
@@ -86,7 +92,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
     return <Loader />;
   }
 
-  // ТУТ БУЛА ПОМИЛКА: тепер цей if просто повертає помилку і закривається
   if (!findPhone) {
     return (
       <div className="container">
@@ -120,7 +125,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
         onClick={() => navigate(-1)}
       >
         <img
-          src="/img/icons/Vector (Stroke).png"
+          src={`${baseUrl}img/icons/Vector (Stroke).png`}
           alt="Back"
           className="description-phones-page__back-button__icon"
         />
@@ -135,7 +140,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
             {findPhone.images.map(img => (
               <img
                 key={img}
-                src={`/${img}`}
+                src={`${baseUrl}${img}`}
                 className={activeImage === img ? 'active' : ''}
                 onClick={() => setActiveImage(img)}
                 alt="thumb"
@@ -143,7 +148,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
             ))}
           </div>
           <div className="description-phones-page__top__gallery__main">
-            <img src={`/${activeImage}`} alt="main" />
+            <img src={`${baseUrl}${activeImage}`} alt="main" />
           </div>
         </div>
 
@@ -237,8 +242,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
                 className="description-phones-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? '/img/icons/Favourites Filled (Heart Like).png'
-                    : '/img/icons/Favourites (Heart Like).png'
+                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />
@@ -313,7 +318,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
         </div>
       </div>
 
-      {/* Якщо AlsoLike потребує productsData, не забудь передати його сюди: */}
       <AlsoLike favourites={favourites} addToFav={addToFav} />
     </div>
   );

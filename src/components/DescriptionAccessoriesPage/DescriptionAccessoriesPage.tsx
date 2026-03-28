@@ -52,8 +52,12 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
+  // Змінна для правильних шляхів на GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL;
+
+  // ЗАВАНТАЖЕННЯ ДАНИХ (додано baseUrl)
   useEffect(() => {
-    fetch('/api/accessories.json')
+    fetch(`${baseUrl}api/accessories.json`)
       .then(res => res.json())
       .then(data => {
         setAccessories(data);
@@ -63,7 +67,7 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
         console.error('Error fetching accessories:', err);
         setLoading(false);
       });
-  }, []);
+  }, [baseUrl]);
 
   const findAcc = accessories.find(acc => acc.id === productId);
   const simpleInfo = productsData.find(p => p.itemId === productId);
@@ -78,7 +82,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
     return <div className="loader">Loading...</div>;
   }
 
-  // ВИПРАВЛЕНО ТУТ: Прибрано зайві дужки
   if (!findAcc) {
     return (
       <div className="container">
@@ -110,8 +113,9 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
         className="description-phones-page__back-button"
         onClick={() => navigate(-1)}
       >
+        {/* Додано baseUrl для стрілочки */}
         <img
-          src="/img/icons/Vector (Stroke).png"
+          src={`${baseUrl}img/icons/Vector (Stroke).png`}
           alt="Back"
           className="description-phones-page__back-button__icon"
         />
@@ -128,7 +132,7 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
             {findAcc.images.map(img => (
               <img
                 key={img}
-                src={`/${img}`}
+                src={`${baseUrl}/${img}`}
                 className={activeImage === img ? 'active' : ''}
                 onClick={() => setActiveImage(img)}
                 alt="thumb"
@@ -136,7 +140,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
             ))}
           </div>
           <div className="description-accessories-page__top__gallery__main">
-            <img src={`/${activeImage}`} alt="main" />
+            {/* Додано baseUrl */}
+            <img src={`${baseUrl}/${activeImage}`} alt="main" />
           </div>
         </div>
 
@@ -227,12 +232,13 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
               className="description-accessories-page__top__buttons__fav"
               onClick={() => simpleInfo && addToFav(simpleInfo)}
             >
+              {/* Додано baseUrl для іконки обраного */}
               <img
                 className="description-accessories-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? '/img/icons/Favourites Filled (Heart Like).png'
-                    : '/img/icons/Favourites (Heart Like).png'
+                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />

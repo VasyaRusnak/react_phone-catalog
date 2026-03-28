@@ -51,9 +51,12 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // 1. Завантаження даних
+  // Змінна для правильних шляхів на GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL;
+
+  // 1. Завантаження даних (додано baseUrl)
   useEffect(() => {
-    fetch('/api/tablets.json')
+    fetch(`${baseUrl}api/tablets.json`)
       .then(res => res.json())
       .then(data => {
         setTablets(data);
@@ -63,7 +66,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
         console.error('Error fetching tablets:', err);
         setLoading(false);
       });
-  }, []);
+  }, [baseUrl]);
 
   const findTablet = tablets.find(t => t.id === productId);
   const simpleInfo = productsData.find(p => p.itemId === productId);
@@ -78,7 +81,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
     return <div className="loader">Loading...</div>;
   }
 
-  // ВИПРАВЛЕНО ТУТ: Прибрано зайві дужки
+  // Прибрано зайві дужки
   if (!findTablet) {
     return (
       <div className="container">
@@ -113,8 +116,9 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
         className="description-phones-page__back-button"
         onClick={() => navigate(-1)}
       >
+        {/* Додано baseUrl для стрілочки */}
         <img
-          src="/img/icons/Vector (Stroke).png"
+          src={`${baseUrl}img/icons/Vector (Stroke).png`}
           alt="Back"
           className="description-phones-page__back-button__icon"
         />
@@ -132,7 +136,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
             {findTablet.images.map(img => (
               <img
                 key={img}
-                src={`/${img}`}
+                src={`${baseUrl}/${img}`}
                 className={activeImage === img ? 'active' : ''}
                 onClick={() => setActiveImage(img)}
                 alt="thumb"
@@ -140,7 +144,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
             ))}
           </div>
           <div className="description-tablets-page__top__gallery__main">
-            <img src={`/${activeImage}`} alt="main" />
+            <img src={`${baseUrl}/${activeImage}`} alt="main" />
           </div>
         </div>
 
@@ -232,12 +236,13 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
               className="description-accessories-page__top__buttons__fav"
               onClick={() => simpleInfo && addToFav(simpleInfo)}
             >
+              {/* Додано baseUrl для іконки обраного */}
               <img
                 className="description-accessories-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? '/img/icons/Favourites Filled (Heart Like).png'
-                    : '/img/icons/Favourites (Heart Like).png'
+                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />

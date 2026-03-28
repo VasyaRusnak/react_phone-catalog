@@ -140,7 +140,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
             {findPhone.images.map(img => (
               <img
                 key={img}
-                src={`${baseUrl}${img}`}
+                src={`${baseUrl}/${img}`}
                 className={activeImage === img ? 'active' : ''}
                 onClick={() => setActiveImage(img)}
                 alt="thumb"
@@ -148,7 +148,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
             ))}
           </div>
           <div className="description-phones-page__top__gallery__main">
-            <img src={`${baseUrl}${activeImage}`} alt="main" />
+            <img src={`${baseUrl}/${activeImage}`} alt="main" />
           </div>
         </div>
 

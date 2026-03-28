@@ -45,7 +45,7 @@ export const CardHP: FC<Props> = ({ product }) => {
       >
         <div className="product-card__image">
           {/* Додали baseUrl до картинки товару */}
-          <img src={`${baseUrl}${product.image}`} alt={product.name} />
+          <img src={`${baseUrl}/${product.image}`} alt={product.name} />
         </div>
       </Link>
 

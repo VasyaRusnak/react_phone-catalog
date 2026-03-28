@@ -93,8 +93,8 @@ export const CardHP: FC<Props> = ({ product }) => {
             className="product-card__fav__icon"
             src={
               isFav
-                ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
-                : `${baseUrl}img/icons/Favourites (Heart Like).png`
+                ? `${baseUrl}/img/icons/Favourites Filled (Heart Like).png`
+                : `${baseUrl}/img/icons/Favourites (Heart Like).png`
             }
             alt="Fav icon"
           />

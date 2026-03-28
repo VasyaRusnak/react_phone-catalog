@@ -37,7 +37,7 @@ export const ShopByCategory: FC = () => {
             </span>
           </Link>
           <Link to="/accessories" className="shopByCategory__items__item">
-            <img src={`${baseUrl}img/icons/Accesoirs.png`} alt="Accessories" />
+            <img src={`${baseUrl}/img/icons/Accesoirs.png`} alt="Accessories" />
             <span className="shopByCategory__items__item__title">
               Accessories
             </span>

@@ -8,6 +8,9 @@ export const CartPage = () => {
   const navigate = useNavigate();
   const [isBlank, setIsBlank] = useState(false); // Стан перенесли нагору
 
+  // Додаємо базу для GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL;
+
   const totalPrice = cart.reduce(
     (acc: number, item: any) => acc + item.price * item.quantity,
     0,
@@ -38,9 +41,10 @@ export const CartPage = () => {
         }}
       >
         <h2>Order successfully placed!</h2>
+        {/* Додано baseUrl + / */}
         <img
           className="cart-page__cart-empty__photo"
-          src="/img/cart-is-empty.png"
+          src={`${baseUrl}/img/cart-is-empty.png`}
           alt="Success"
         />
       </div>
@@ -53,9 +57,10 @@ export const CartPage = () => {
         <button onClick={() => navigate(-1)} className="back-button">
           Back
         </button>
+        {/* Додано baseUrl + / */}
         <img
           className="cart-page__cart-empty__photo"
-          src="/img/cart-is-empty.png"
+          src={`${baseUrl}/img/cart-is-empty.png`}
           alt="Cart is empty"
         />
       </div>
@@ -87,8 +92,9 @@ export const CartPage = () => {
               </button>
 
               <div className="cart-page__cart-container__cart-list__cart-card__info">
+                {/* Додано baseUrl + / для картинки товару */}
                 <img
-                  src={`/${item.image}`}
+                  src={`${baseUrl}/${item.image}`}
                   alt={item.name}
                   className="cart-page__cart-container__cart-list__cart-card__img"
                 />

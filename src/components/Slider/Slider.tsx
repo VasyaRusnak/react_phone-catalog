@@ -33,8 +33,8 @@ export const Slider = () => {
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {images.map((src, i) => (
-            // Підставляємо baseUrl динамічно під час рендеру
-            <img key={i} src={`${baseUrl}${src}`} className="slider__image" alt={`Slide ${i}`} />
+            // ДОДАНО СЛЕШ: `${baseUrl}/${src}`
+            <img key={i} src={`${baseUrl}/${src}`} className="slider__image" alt={`Slide ${i}`} />
           ))}
         </div>
       </div>

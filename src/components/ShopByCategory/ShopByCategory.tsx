@@ -25,7 +25,7 @@ export const ShopByCategory: FC = () => {
         {/* КАТЕГОРІЯ: PHONES */}
         <Link to="/phones" className="shopByCategory__items__item">
           <div className="shopByCategory__items__item__image-container">
-            <img src={`${baseUrl}img/category-phones.png`} alt="Phones" />
+            <img src={`${baseUrl}/img/category-phones.png`} alt="Phones" />
           </div>
           <span className="shopByCategory__items__item__title">Mobile phones</span>
           <span className="shopByCategory__items__item__models">
@@ -36,7 +36,7 @@ export const ShopByCategory: FC = () => {
         {/* КАТЕГОРІЯ: TABLETS */}
         <Link to="/tablets" className="shopByCategory__items__item">
           <div className="shopByCategory__items__item__image-container">
-            <img src={`${baseUrl}img/category-tablets.png`} alt="Tablets" />
+            <img src={`${baseUrl}/img/category-tablets.png`} alt="Tablets" />
           </div>
           <span className="shopByCategory__items__item__title">Tablets</span>
           <span className="shopByCategory__items__item__models">
@@ -47,7 +47,7 @@ export const ShopByCategory: FC = () => {
         {/* КАТЕГОРІЯ: ACCESSORIES */}
         <Link to="/accessories" className="shopByCategory__items__item">
           <div className="shopByCategory__items__item__image-container">
-            <img src={`${baseUrl}img/category-accessories.png`} alt="Accessories" />
+            <img src={`${baseUrl}/img/category-accessories.png`} alt="Accessories" />
           </div>
           <span className="shopByCategory__items__item__title">Accessories</span>
           <span className="shopByCategory__items__item__models">

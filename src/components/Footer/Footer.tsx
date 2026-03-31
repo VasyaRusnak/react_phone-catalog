@@ -43,7 +43,7 @@ export const Footer: FC = () => {
             Back to top
             {/* Іконка стрілочки залишається через baseUrl, бо вона лежить в public/img/... */}
             <img
-              src={`${baseUrl}img/icons/Slider button - Default (right).png`}
+              src={`${baseUrl}/img/icons/Slider button - Default (right).png`}
               alt="back icon"
             />
           </a>

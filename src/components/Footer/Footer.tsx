@@ -3,7 +3,7 @@ import './Footer.scss';
 import { NavLink } from 'react-router-dom';
 
 // 1. Імпортуємо логотип так само, як у хедері
-import logo from '../../Logo.png';
+import logo from '../../../Logo.png';
 
 export const Footer: FC = () => {
   // База потрібна нам для іконки стрілочки "Back to top", бо вона лежить у public

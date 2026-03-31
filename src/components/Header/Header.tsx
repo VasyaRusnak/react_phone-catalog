@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 // 1. ІМПОРТУЄМО ЛОГОТИП (з папки src, тобто на 2 рівні вище)
-import logo from '../../Logo.png';
+import logo from '../../../Logo.png';
 
 type Props = {
   page?: Page;

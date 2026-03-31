@@ -11,9 +11,9 @@ export const Contacts: React.FC = () => {
       <div className="contacts__container">
         <div className="developer-card">
           <div className="developer-card__image-container">
-            {/* Додали baseUrl */}
+            {/* ДОДАЛИ СЛЕШ: `${baseUrl}/img/img.png` */}
             <img
-              src={`${baseUrl}img/img.png`}
+              src={`${baseUrl}/img/img.png`}
               alt="Rusnak Vasyl"
               className="developer-card__photo"
             />

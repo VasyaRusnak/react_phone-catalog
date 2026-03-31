@@ -1,5 +1,10 @@
 .favourites-page{
-  &__list {
+  max-width: 1200px; // Або 1280px, залежно від макету
+  margin: 0 auto; // Центрує контент
+  padding: 0 16px; // Мінімальні відступи для мобілок, щоб текст не лип до країв
+
+
+&__list {
     display: flex;
     flex-direction: row;
     gap: 8px;

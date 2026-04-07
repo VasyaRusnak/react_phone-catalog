@@ -45,14 +45,12 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { favourites, addToFav } = useFavourites();
-  // ДІСТАЄМО removeItem з контексту
   const { cart, addToCart, removeItem } = useCart();
 
   const [tablets, setTablets] = useState<TabletData[]>([]);
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
   // 1. Завантаження даних
@@ -106,36 +104,37 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
     yellow: '#FAF569',
   };
 
-  // Перевіряємо, чи є товар у вибраному/кошику, використовуючи String()
-  const isFav = favourites.some(fav => String(fav.id) === String(simpleInfo?.id));
-  const isAdded = cart.some(c => String(c.id) === String(simpleInfo?.id));
+  const isFav = simpleInfo
+    ? favourites.some(fav => String(fav.id) === String(simpleInfo.id))
+    : false;
+  const isAdded = simpleInfo
+    ? cart.some(c => String(c.id) === String(simpleInfo.id))
+    : false;
 
-  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
   const handleCartClick = () => {
-    if (!simpleInfo) return; // Запобіжник, якщо simpleInfo не знайдено
+    if (!simpleInfo) return;
 
     if (isAdded) {
-      // Якщо вже додано - видаляємо
       removeItem(String(simpleInfo.id));
     } else {
-      // Якщо не додано - додаємо
       addToCart({ ...simpleInfo, id: String(simpleInfo.id), quantity: 1 });
     }
   };
 
   return (
     <div className="description-tablets-page container">
+      {/* Виправив клас на description-tablets-page */}
       <button
         type="button"
-        className="description-phones-page__back-button"
+        className="description-tablets-page__back-button"
         onClick={() => navigate(-1)}
       >
         <img
-          src={`${baseUrl}img/icons/Vector (Stroke).png`}
+          src={`${baseUrl}/img/icons/Vector (Stroke).png`}
           alt="Back"
-          className="description-phones-page__back-button__icon"
+          className="description-tablets-page__back-button__icon"
         />
-        <span className="description-phones-page__back-button__text">Back</span>
+        <span className="description-tablets-page__back-button__text">Back</span>
       </button>
 
       <h1 className="description-tablets-page__top__title">
@@ -175,7 +174,8 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
           <div className="description-tablets-page__top__options__colors">
             {findTablet.colorsAvailable.map(color => {
               const newId = findTablet.id.replace(findTablet.color, color);
-              const isActive = findTablet.color === color;
+              // Додано toLowerCase()
+              const isActive = findTablet.color.toLowerCase() === color.toLowerCase();
 
               return (
                 <button
@@ -202,7 +202,8 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
                   findTablet.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                const isActive = findTablet.capacity === cap;
+                // Додано toLowerCase()
+                const isActive = findTablet.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (
                   <button
@@ -230,12 +231,12 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
           </div>
 
           <div className="description-tablets-page__top__buttons">
-            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
+            {/* Виправив класи на description-tablets-page */}
             <button
               type="button"
-              className={`description-accessories-page__top__buttons__add-to ${
+              className={`description-tablets-page__top__buttons__add-to ${
                 isAdded
-                  ? 'description-accessories-page__top__buttons__add-to--active'
+                  ? 'description-tablets-page__top__buttons__add-to--active'
                   : ''
               }`}
               onClick={handleCartClick}
@@ -243,14 +244,13 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
-            {/* КНОПКА ВИБРАНОГО */}
             <button
               type="button"
-              className="description-accessories-page__top__buttons__fav"
+              className="description-tablets-page__top__buttons__fav"
               onClick={() => simpleInfo && addToFav(simpleInfo)}
             >
               <img
-                className="description-accessories-page__top__buttons__add-to__icon"
+                className="description-tablets-page__top__buttons__add-to__icon"
                 src={
                   isFav
                     ? `${baseUrl}/img/icons/Favourites Filled (Heart Like).png`

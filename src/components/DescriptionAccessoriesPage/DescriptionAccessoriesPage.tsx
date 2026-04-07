@@ -45,7 +45,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
                                                       }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  // ДІСТАЄМО removeItem
   const { cart, addToCart, removeItem } = useCart();
   const { favourites, addToFav } = useFavourites();
 
@@ -53,10 +52,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
-  // ЗАВАНТАЖЕННЯ ДАНИХ
   useEffect(() => {
     fetch(`${baseUrl}/api/accessories.json`)
       .then(res => res.json())
@@ -107,7 +104,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
     purple: '#B282D3',
   };
 
-  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
   const handleCartClick = () => {
     if (!simpleInfo) return;
 
@@ -120,17 +116,18 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
 
   return (
     <div className="description-accessories-page container">
+      {/* Виправив класи на description-accessories-page */}
       <button
         type="button"
-        className="description-phones-page__back-button"
+        className="description-accessories-page__back-button"
         onClick={() => navigate(-1)}
       >
         <img
           src={`${baseUrl}/img/icons/Vector (Stroke).png`}
           alt="Back"
-          className="description-phones-page__back-button__icon"
+          className="description-accessories-page__back-button__icon"
         />
-        <span className="description-phones-page__back-button__text">Back</span>
+        <span className="description-accessories-page__back-button__text">Back</span>
       </button>
 
       <h1 className="description-accessories-page__top__title">
@@ -168,7 +165,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
           <div className="description-accessories-page__top__options__colors">
             {findAcc.colorsAvailable.map(color => {
               const newId = findAcc.id.replace(findAcc.color, color);
-              const isActive = findAcc.color === color;
+              // Додано toLowerCase() для кольору
+              const isActive = findAcc.color.toLowerCase() === color.toLowerCase();
 
               return (
                 <button
@@ -195,7 +193,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
                   findAcc.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                const isActive = findAcc.capacity === cap;
+                // Додано toLowerCase() для пам'яті
+                const isActive = findAcc.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (
                   <button
@@ -223,7 +222,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
           </div>
 
           <div className="description-accessories-page__top__buttons">
-            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
             <button
               type="button"
               className={`description-accessories-page__top__buttons__add-to ${
@@ -236,7 +234,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
-            {/* КНОПКА УЛЮБЛЕНИХ */}
             <button
               type="button"
               className="description-accessories-page__top__buttons__fav"

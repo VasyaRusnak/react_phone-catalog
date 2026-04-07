@@ -1,19 +1,20 @@
 .description-tablets-page {
-  max-width: 1200px; // Або 1280px, залежно від макету
-  margin: 0 auto;    // Центрує контент
-  padding: 0 16px;   // Мінімальні відступи для мобілок, щоб текст не лип до країв
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
 
   @media (min-width: 640px) {
-    padding: 0 32px; // Більші відступи для планшетів
+    padding: 0 32px;
   }
+
   &__back-button {
     display: flex;
     align-items: center;
-    gap: 8px; // Відступ між стрілкою і текстом
+    gap: 8px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 24px 0; // Вертикальні відступи за макетом
+    padding: 24px 0;
     text-decoration: none;
     transition: all 0.3s ease;
 
@@ -22,34 +23,31 @@
       align-items: center;
       width: 8px;
       height: 8px;
-
-      // Якщо іконка занадто світла/темна, можна додати filter: brightness(0.5);
     }
 
     &__text {
-      font-family: Mont;
+      font-family: Mont, Arial, sans-serif;
       font-weight: 700;
       font-size: 12px;
-      leading-trim: NONE;
       line-height: 100%;
-
-      color: #89939a; // Сірий колір з UI Kit
+      color: #89939a;
       transition: color 0.3s;
     }
 
     &:hover {
-      .back-button__text {
-        color: #313237; // Темніший колір при ховері
+      .description-tablets-page__back-button__text {
+        color: #313237;
       }
     }
   }
+
   &__top {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 64px;
 
     @media (max-width: 639px) {
-      grid-template-columns: 1fr; // Одна колонка
+      grid-template-columns: 1fr;
       gap: 32px;
     }
 
@@ -69,20 +67,15 @@
           font-weight: 700;
           font-size: 12px;
           line-height: 100%;
-          letter-spacing: 0%;
           color: #89939A;
-
         }
 
         &__value {
           font-family: Mont, Arial, sans-serif;
           font-weight: 700;
           font-size: 12px;
-          leading-trim: NONE;
           line-height: 100%;
-          letter-spacing: 0%;
           text-align: right;
-
         }
       }
     }
@@ -106,7 +99,6 @@
         &__icon {
           width: 16px;
           height: 16px;
-
         }
       }
 
@@ -119,10 +111,11 @@
         font-weight: 600;
         cursor: pointer;
         border-radius: 0;
+        transition: all 0.2s ease;
 
-        &--active{
+        &--active {
           background-color: white;
-          color: greenyellow;
+          color: #27ae60; // Зелений колір "Added"
           border: 1px solid #b4bdc3;
         }
       }
@@ -139,20 +132,15 @@
         font-family: Mont, Arial, sans-serif;
         font-weight: 600;
         font-size: 22px;
-        leading-trim: NONE;
         line-height: 100%;
-        letter-spacing: 0;
         text-decoration: line-through;
-
       }
 
       &__discount {
         font-size: 32px;
         font-family: Mont, Arial, sans-serif;
         font-weight: 800;
-        leading-trim: NONE;
         line-height: 140%;
-        letter-spacing: 0;
         color: #313237;
       }
     }
@@ -164,8 +152,6 @@
 
       @media (max-width: 640px) {
         flex-direction: column-reverse;
-        display: flex;
-        justify-content: center;
       }
 
       &__thumbs {
@@ -174,7 +160,7 @@
         gap: 8px;
 
         @media (max-width: 640px) {
-          flex-direction: row; // Горизонтальні мініатюри на мобільних
+          flex-direction: row;
           justify-content: center;
         }
 
@@ -183,6 +169,7 @@
           height: 80px;
           object-fit: contain;
           cursor: pointer;
+          border: 1px solid transparent;
 
           @media (max-width: 1199px) {
             width: 30px;
@@ -193,6 +180,10 @@
             width: 50px;
             height: 50px;
           }
+
+          &.active {
+            border: 1px solid #313237;
+          }
         }
       }
 
@@ -200,14 +191,13 @@
         display: flex;
         width: 100%;
         height: 464px;
-
         justify-content: center;
         align-items: center;
 
         @media (max-width: 1199px) {
           max-width: 287px;
           height: auto;
-          aspect-ratio: 1 / 1; // Робить блок квадратним
+          aspect-ratio: 1 / 1;
           margin: 0 auto;
         }
 
@@ -220,15 +210,12 @@
     }
 
     &__capacity {
-
-
       &__text {
         font-weight: 700;
         font-size: 12px;
         line-height: 100%;
-        letter-spacing: 0;
         color: #B4BDC3;
-
+        margin-bottom: 8px;
       }
 
       &__buttons {
@@ -248,7 +235,14 @@
           text-align: center;
           color: #313237;
           cursor: pointer;
+          transition: all 0.2s ease;
 
+          /* Стиль активної пам'яті */
+          &.active {
+            background-color: #313237;
+            color: #ffffff;
+            border-color: #313237;
+          }
         }
       }
     }
@@ -268,10 +262,7 @@
           font-weight: 700;
           font-size: 12px;
           line-height: 100%;
-          letter-spacing: 0;
-          text-align: right;
           color: #B4BDC3;
-
         }
       }
 
@@ -280,22 +271,24 @@
         gap: 10px;
         padding-bottom: 20px;
         border-bottom: 1px solid #E2E6E9;
-
       }
 
       &__button {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        border: 1px solid transparent;
+        border: 1px solid #e2e6e9; // Стандартна тонка рамка
         cursor: pointer;
         padding: 0;
         transition: all 0.2s ease-in-out;
         position: relative;
         background-clip: content-box;
 
-        box-shadow: 0 0 0 1px #fff,
-        0 0 0 2px #7f8087
+        /* Стиль активного кольору (кільце) */
+        &.active-color {
+          border-color: transparent;
+          box-shadow: 0 0 0 1px #fff, 0 0 0 2px #313237;
+        }
       }
     }
   }
@@ -307,9 +300,8 @@
     gap: 64px;
 
     @media (max-width: 1199px) {
-      grid-template-columns: 1fr; // Одна колонка
+      grid-template-columns: 1fr;
       gap: 32px;
-
     }
 
     &__tech {
@@ -324,7 +316,7 @@
         color: #313237;
         margin-bottom: 16px;
         padding-bottom: 16px;
-        border-bottom: 1px solid #E2E6E9; // Лінія як на макеті
+        border-bottom: 1px solid #E2E6E9;
       }
 
       &__lists {
@@ -346,7 +338,7 @@
             font-weight: 600;
             font-size: 14px;
             line-height: 21px;
-            color: #89939A; // Сірий колір для назви
+            color: #89939A;
           }
 
           &__value {
@@ -354,7 +346,7 @@
             font-weight: 600;
             font-size: 14px;
             line-height: 21px;
-            color: #313237; // Темний колір для значення
+            color: #313237;
             text-align: right;
           }
         }

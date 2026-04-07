@@ -4,6 +4,7 @@ import { AlsoLike } from '../AlsoLike/AlsoLike';
 import { useFavourites } from '../FavouritesPage/FavouritesContext';
 import { useCart } from '../Cart/CartContext';
 import './DescriptionTabletsPage.scss';
+import productsData from '/public/api/products.json'; // 1. ДОДАНО ІМПОРТ
 
 // Інтерфейси для типізації
 interface TabletDescription {
@@ -28,20 +29,10 @@ interface TabletData {
   description: TabletDescription[];
 }
 
-interface Product {
-  id: string; // Тут id типу string, якщо це з productsData
-  itemId: string;
-  name: string;
-  fullPrice: number;
-  price: number;
-  image: string;
-}
+// 2. ПРИБРАНО interface Props
 
-interface Props {
-  productsData: Product[];
-}
-
-export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
+// 3. ЗАБРАНО productsData З ПРОПСІВ
+export const DescriptionTabletsPage: FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { favourites, addToFav } = useFavourites();
@@ -68,6 +59,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
   }, [baseUrl]);
 
   const findTablet = tablets.find(t => t.id === productId);
+  // 4. ТЕПЕР simpleInfo БЕРЕТЬСЯ НАПРЯМУ З ІМПОРТОВАНОГО ФАЙЛУ
   const simpleInfo = productsData.find(p => p.itemId === productId);
 
   useEffect(() => {
@@ -112,7 +104,10 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
     : false;
 
   const handleCartClick = () => {
-    if (!simpleInfo) return;
+    if (!simpleInfo) {
+      console.warn('simpleInfo is still undefined! Check products.json for itemId:', productId);
+      return;
+    }
 
     if (isAdded) {
       removeItem(String(simpleInfo.id));
@@ -123,7 +118,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
 
   return (
     <div className="description-tablets-page container">
-      {/* Виправив клас на description-tablets-page */}
       <button
         type="button"
         className="description-tablets-page__back-button"
@@ -174,7 +168,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
           <div className="description-tablets-page__top__options__colors">
             {findTablet.colorsAvailable.map(color => {
               const newId = findTablet.id.replace(findTablet.color, color);
-              // Додано toLowerCase()
               const isActive = findTablet.color.toLowerCase() === color.toLowerCase();
 
               return (
@@ -202,7 +195,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
                   findTablet.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                // Додано toLowerCase()
                 const isActive = findTablet.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (
@@ -231,7 +223,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
           </div>
 
           <div className="description-tablets-page__top__buttons">
-            {/* Виправив класи на description-tablets-page */}
             <button
               type="button"
               className={`description-tablets-page__top__buttons__add-to ${

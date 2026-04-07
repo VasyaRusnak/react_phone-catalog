@@ -6,6 +6,9 @@ import { AlsoLike } from '../AlsoLike/AlsoLike';
 import './DescriptionPhonesPage.scss';
 import { Loader } from '../Loader/Loader';
 
+// 1. ДОДАЛИ ЦЕЙ ІМПОРТ:
+import productsData from '/public/api/products.json';
+
 // Визначаємо типи даних
 interface PhoneDescription {
   title: string;
@@ -32,20 +35,10 @@ interface PhoneData {
   description: PhoneDescription[];
 }
 
-interface Product {
-  id: string;
-  itemId: string;
-  name: string;
-  fullPrice: number;
-  price: number;
-  image: string;
-}
+// 2. ЗАБРАЛИ interface Props
 
-interface Props {
-  productsData: Product[];
-}
-
-export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
+// 3. ПРИБРАЛИ productsData З ПРОПСІВ
+export const DescriptionPhonesPage: FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { cart, addToCart, removeItem } = useCart();
@@ -71,6 +64,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   }, [baseUrl]);
 
   const findPhone = phones.find(p => p.id === productId);
+
+  // simpleInfo ТЕПЕР ШУКАЄ ТОВАРИ У ФАЙЛІ products.json, А НЕ В ПОРОЖНЬОМУ МАСИВІ
   const simpleInfo = productsData.find(p => p.itemId === productId);
 
   const isAdded = simpleInfo
@@ -115,7 +110,10 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   };
 
   const handleCartClick = () => {
-    if (!simpleInfo) return;
+    if (!simpleInfo) {
+      console.warn('simpleInfo is still undefined! Check products.json for itemId:', productId);
+      return;
+    }
 
     if (isAdded) {
       removeItem(String(simpleInfo.id));
@@ -171,7 +169,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
           <div className="description-phones-page__top__options__colors">
             {findPhone.colorsAvailable.map(color => {
               const newId = findPhone.id.replace(findPhone.color, color);
-              // ТУТ ВИПРАВЛЕНО: додано toLowerCase()
               const isActive = findPhone.color.toLowerCase() === color.toLowerCase();
 
               return (
@@ -199,7 +196,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
                   findPhone.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                // ТУТ ВИПРАВЛЕНО: додано toLowerCase()
                 const isActive = findPhone.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (

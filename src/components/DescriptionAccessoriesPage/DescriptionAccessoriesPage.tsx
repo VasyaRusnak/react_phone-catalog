@@ -5,6 +5,9 @@ import { useFavourites } from '../FavouritesPage/FavouritesContext';
 import { useCart } from '../Cart/CartContext';
 import './DescriptionAccessoriesPage.scss';
 
+// 1. ДОДАНО ІМПОРТ НАПРЯМУ
+import productsData from '/public/api/products.json';
+
 interface AccessoryDescription {
   title: string;
   text: string[];
@@ -27,22 +30,10 @@ interface AccessoryData {
   description: AccessoryDescription[];
 }
 
-interface Product {
-  id: string;
-  itemId: string;
-  name: string;
-  fullPrice: number;
-  price: number;
-  image: string;
-}
+// 2. ЗАБРАНО interface Props
 
-interface Props {
-  productsData: Product[];
-}
-
-export const DescriptionAccessoriesPage: FC<Props> = ({
-                                                        productsData = [],
-                                                      }) => {
+// 3. ЗАБРАНО productsData З ПРОПСІВ
+export const DescriptionAccessoriesPage: FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { cart, addToCart, removeItem } = useCart();
@@ -68,6 +59,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
   }, [baseUrl]);
 
   const findAcc = accessories.find(acc => acc.id === productId);
+
+  // 4. ТЕПЕР simpleInfo БЕРЕТЬСЯ З ІМПОРТУ
   const simpleInfo = productsData.find(p => p.itemId === productId);
 
   useEffect(() => {
@@ -105,7 +98,10 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
   };
 
   const handleCartClick = () => {
-    if (!simpleInfo) return;
+    if (!simpleInfo) {
+      console.warn('simpleInfo is still undefined! Check products.json for itemId:', productId);
+      return;
+    }
 
     if (isAdded) {
       removeItem(String(simpleInfo.id));
@@ -116,7 +112,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
 
   return (
     <div className="description-accessories-page container">
-      {/* Виправив класи на description-accessories-page */}
       <button
         type="button"
         className="description-accessories-page__back-button"
@@ -165,7 +160,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
           <div className="description-accessories-page__top__options__colors">
             {findAcc.colorsAvailable.map(color => {
               const newId = findAcc.id.replace(findAcc.color, color);
-              // Додано toLowerCase() для кольору
               const isActive = findAcc.color.toLowerCase() === color.toLowerCase();
 
               return (
@@ -193,7 +187,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
                   findAcc.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                // Додано toLowerCase() для пам'яті
                 const isActive = findAcc.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (

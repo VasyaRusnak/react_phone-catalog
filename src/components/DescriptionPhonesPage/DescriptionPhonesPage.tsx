@@ -48,7 +48,6 @@ interface Props {
 export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  // ДІСТАЄМО removeItem
   const { cart, addToCart, removeItem } = useCart();
   const { favourites, addToFav } = useFavourites();
 
@@ -56,10 +55,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
-  // ЗАВАНТАЖЕННЯ ДАНИХ ЧЕРЕЗ FETCH
   useEffect(() => {
     fetch(`${baseUrl}/api/phones.json`)
       .then(res => res.json())
@@ -117,7 +114,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
     yellow: '#FAF569',
   };
 
-  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
   const handleCartClick = () => {
     if (!simpleInfo) return;
 
@@ -128,7 +124,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
     }
   };
 
-  // ОСНОВНИЙ РЕНДЕР СТОРІНКИ
   return (
     <div className="description-phones-page container">
       <button
@@ -176,7 +171,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
           <div className="description-phones-page__top__options__colors">
             {findPhone.colorsAvailable.map(color => {
               const newId = findPhone.id.replace(findPhone.color, color);
-              const isActive = findPhone.color === color;
+              // ТУТ ВИПРАВЛЕНО: додано toLowerCase()
+              const isActive = findPhone.color.toLowerCase() === color.toLowerCase();
 
               return (
                 <button
@@ -203,7 +199,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
                   findPhone.capacity.toLowerCase(),
                   cap.toLowerCase(),
                 );
-                const isActive = findPhone.capacity === cap;
+                // ТУТ ВИПРАВЛЕНО: додано toLowerCase()
+                const isActive = findPhone.capacity.toLowerCase() === cap.toLowerCase();
 
                 return (
                   <button
@@ -231,7 +228,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
           </div>
 
           <div className="description-phones-page__top__buttons">
-            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
             <button
               type="button"
               className={`description-phones-page__top__buttons__add-to ${
@@ -244,7 +240,6 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
-            {/* КНОПКА УЛЮБЛЕНИХ */}
             <button
               type="button"
               className="description-phones-page__top__buttons__fav"

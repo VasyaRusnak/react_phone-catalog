@@ -3,7 +3,7 @@ import productsData from '/public/api/products.json';
 import './AccessoriesPage.scss';
 import { SortSection } from '../SortSection/SortSection';
 import { CardHP } from '../CardHP/CardHP';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type AccessoriesPageProps = {
   favourites: string[];
@@ -14,12 +14,16 @@ export const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
                                                                   favourites,
                                                                   addToFav,
                                                                 }) => {
-  const [accessories, setAccessories] = useState<any[]>([]);
-  const [sortBy, setSortBy] = useState('newest');
-  const [itemsPerPage, setItemsPerPage] = useState(16);
-  const [currentPage, setCurrentPage] = useState(1);
+  type sortType = 'alpha' | 'cheap' | 'newest';
 
   const navigator = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const sortBy = (searchParams.get('sortBy') as sortType) || 'newest';
+  const itemsPerPage = Number(searchParams.get('itemsPerPage')) || 16;
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const [accessories, setAccessories] = useState<any[]>([]);
 
   useEffect(() => {
     const accessoriesOnly = productsData.filter(
@@ -28,13 +32,23 @@ export const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
     setAccessories(accessoriesOnly);
   }, []);
 
-  // 1. Сортуємо ВСІ аксесуари
+  const updateSearchParam = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(key, value);
+
+    if (key !== 'page') {
+      newParams.set('page', '1');
+    }
+
+    setSearchParams(newParams);
+  };
+
   const sorted = [...accessories].sort((a, b) => {
     switch (sortBy) {
       case 'cheap':
         return a.price - b.price;
       case 'alpha':
-        return a.name.localeCompare(b.name); // Виправлено тут
+        return a.name.localeCompare(b.name);
       case 'newest':
         return b.year - a.year;
       default:
@@ -42,7 +56,6 @@ export const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
     }
   });
 
-  // 2. Робимо slice тільки для поточної сторінки
   const sortedAccessories = sorted.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -60,14 +73,8 @@ export const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
         total={accessories.length}
         sortBy={sortBy}
         itemsPerPage={itemsPerPage}
-        onSortChange={(value) => {
-          setSortBy(value);
-          setCurrentPage(1); // Скидаємо на 1 сторінку
-        }}
-        onItemsChange={(value) => {
-          setItemsPerPage(value);
-          setCurrentPage(1); // Скидаємо на 1 сторінку
-        }}
+        onSortChange={(value) => updateSearchParam('sortBy', value)}
+        onItemsChange={(value) => updateSearchParam('itemsPerPage', value.toString())}
       />
 
       <div className="accessories-page__list">
@@ -92,7 +99,7 @@ export const AccessoriesPage: React.FC<AccessoriesPageProps> = ({
                   ? 'phones-page__pagination__active'
                   : 'phones-page__pagination__default'
               }
-              onClick={() => setCurrentPage(page)}
+              onClick={() => updateSearchParam('page', page.toString())}
             >
               {page}
             </button>

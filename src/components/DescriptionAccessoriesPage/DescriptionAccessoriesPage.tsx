@@ -45,7 +45,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
                                                       }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  const { cart, addToCart } = useCart();
+  // ДІСТАЄМО removeItem
+  const { cart, addToCart, removeItem } = useCart();
   const { favourites, addToFav } = useFavourites();
 
   const [accessories, setAccessories] = useState<AccessoryData[]>([]);
@@ -55,7 +56,7 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
   // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
-  // ЗАВАНТАЖЕННЯ ДАНИХ (додано baseUrl)
+  // ЗАВАНТАЖЕННЯ ДАНИХ
   useEffect(() => {
     fetch(`${baseUrl}/api/accessories.json`)
       .then(res => res.json())
@@ -106,6 +107,17 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
     purple: '#B282D3',
   };
 
+  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
+  const handleCartClick = () => {
+    if (!simpleInfo) return;
+
+    if (isAdded) {
+      removeItem(String(simpleInfo.id));
+    } else {
+      addToCart({ ...simpleInfo, id: String(simpleInfo.id), quantity: 1 });
+    }
+  };
+
   return (
     <div className="description-accessories-page container">
       <button
@@ -113,9 +125,8 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
         className="description-phones-page__back-button"
         onClick={() => navigate(-1)}
       >
-        {/* Додано baseUrl для стрілочки */}
         <img
-          src={`${baseUrl}img/icons/Vector (Stroke).png`}
+          src={`${baseUrl}/img/icons/Vector (Stroke).png`}
           alt="Back"
           className="description-phones-page__back-button__icon"
         />
@@ -140,7 +151,6 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
             ))}
           </div>
           <div className="description-accessories-page__top__gallery__main">
-            {/* Додано baseUrl */}
             <img src={`${baseUrl}/${activeImage}`} alt="main" />
           </div>
         </div>
@@ -213,6 +223,7 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
           </div>
 
           <div className="description-accessories-page__top__buttons">
+            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
             <button
               type="button"
               className={`description-accessories-page__top__buttons__add-to ${
@@ -220,25 +231,23 @@ export const DescriptionAccessoriesPage: FC<Props> = ({
                   ? 'description-accessories-page__top__buttons__add-to--active'
                   : ''
               }`}
-              onClick={() =>
-                simpleInfo && addToCart({ ...simpleInfo, quantity: 1 })
-              }
+              onClick={handleCartClick}
             >
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
+            {/* КНОПКА УЛЮБЛЕНИХ */}
             <button
               type="button"
               className="description-accessories-page__top__buttons__fav"
               onClick={() => simpleInfo && addToFav(simpleInfo)}
             >
-              {/* Додано baseUrl для іконки обраного */}
               <img
                 className="description-accessories-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
-                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
+                    ? `${baseUrl}/img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}/img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />

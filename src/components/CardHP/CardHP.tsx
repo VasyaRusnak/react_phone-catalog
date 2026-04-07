@@ -23,18 +23,24 @@ type Props = {
 };
 
 export const CardHP: FC<Props> = ({ product }) => {
-  const { cart, addToCart } = useCart();
+  const { cart, addToCart,removeItem } = useCart();
   const { favourites, addToFav } = useFavourites();
 
   const isFav = favourites.some(fav => fav.id === product.id);
-  const isAdded = cart.some(item => item.id === product.id);
-
+  const isAdded = cart.some(item => String(item.id) === String(product.id));
   // Шлях до сторінки опису, наприклад: /phones/apple-iphone-13
   const productPath = `/${product.category}/${product.itemId}`;
 
   // Магія Vite для GitHub Pages (щоб картинки не ламалися)
   const baseUrl = import.meta.env.BASE_URL;
+const handleAdd=()=>{
+  if (isAdded){
+    removeItem(String(product.id));}
+    else{ addToCart({ ...product, id: String(product.id), quantity: 1 });
 
+    }
+
+}
   return (
     <article className="product-card">
       {/* ЛІНК ТЕПЕР ОБГОРТАЄ І КАРТИНКУ, І НАЗВУ */}
@@ -75,7 +81,7 @@ export const CardHP: FC<Props> = ({ product }) => {
       <div className="product-card__actions">
         <button
           type="button"
-          onClick={() => addToCart({ ...product, quantity: 1 })}
+          onClick={handleAdd}
           className={`product-card__add ${
             isAdded ? 'product-card__add--active' : ''
           }`}

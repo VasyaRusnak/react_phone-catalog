@@ -3,7 +3,7 @@ import productsData from '/public/api/products.json';
 import './PhonesPage.scss';
 import { SortSection } from '../SortSection/SortSection';
 import { CardHP } from '../CardHP/CardHP';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type PhonesPageProps = {
   favourites: string[];
@@ -11,28 +11,45 @@ type PhonesPageProps = {
 };
 
 export const PhonesPage: React.FC<PhonesPageProps> = ({
-  favourites,
-  addToFav,
-}) => {
+                                                        favourites,
+                                                        addToFav,
+                                                      }) => {
   type sortType = 'alpha' | 'cheap' | 'newest';
-  const [currentPage, setCurrentPage] = useState(1);
+
   const navigator = useNavigate();
-  const navigateTo = (productId: string) => {
-    navigator(productId, { relative: 'path' });
-  };
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // 1. Read state from URL search params, providing fallbacks
+  const sortBy = (searchParams.get('sortBy') as sortType) || 'newest';
+  const itemsPerPage = Number(searchParams.get('itemsPerPage')) || 16;
+  const currentPage = Number(searchParams.get('page')) || 1;
 
   const [phones, setPhones] = useState<(typeof productsData)[0][]>([]);
-  const [sortBy, setSortBy] = useState<sortType>('newest');
-  const [itemsPerPage, setItemsPerPage] = useState<number>(16);
   const totalPages = Math.ceil(phones.length / itemsPerPage);
 
   useEffect(() => {
     const onlyPhones = productsData.filter(
       product => product.category === 'phones',
     );
-
     setPhones(onlyPhones);
   }, []);
+
+  // 2. Helper function to update the URL parameters
+  const updateSearchParam = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(key, value);
+
+    // Reset to page 1 if sorting or items per page change
+    if (key !== 'page') {
+      newParams.set('page', '1');
+    }
+
+    setSearchParams(newParams);
+  };
+
+  const navigateTo = (productId: string) => {
+    navigator(productId, { relative: 'path' });
+  };
 
   const sortedPhones = [...phones]
     .sort((a, b) => {
@@ -54,9 +71,9 @@ export const PhonesPage: React.FC<PhonesPageProps> = ({
       <SortSection
         total={phones.length}
         sortBy={sortBy}
-        onSortChange={setSortBy}
-        onItemsChange={setItemsPerPage}
         itemsPerPage={itemsPerPage}
+        onSortChange={(value) => updateSearchParam('sortBy', value)}
+        onItemsChange={(value) => updateSearchParam('itemsPerPage', value.toString())}
       />
 
       <div className="phones-page__list">
@@ -79,7 +96,7 @@ export const PhonesPage: React.FC<PhonesPageProps> = ({
                 ? 'phones-page__pagination__active'
                 : 'phones-page__pagination__default'
             }
-            onClick={() => setCurrentPage(page)}
+            onClick={() => updateSearchParam('page', page.toString())}
           >
             {page}
           </button>

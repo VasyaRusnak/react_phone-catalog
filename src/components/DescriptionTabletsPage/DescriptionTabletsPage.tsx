@@ -29,7 +29,7 @@ interface TabletData {
 }
 
 interface Product {
-  id: string;
+  id: string; // Тут id типу string, якщо це з productsData
   itemId: string;
   name: string;
   fullPrice: number;
@@ -45,7 +45,8 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { favourites, addToFav } = useFavourites();
-  const { cart, addToCart } = useCart();
+  // ДІСТАЄМО removeItem з контексту
+  const { cart, addToCart, removeItem } = useCart();
 
   const [tablets, setTablets] = useState<TabletData[]>([]);
   const [activeImage, setActiveImage] = useState<string>('');
@@ -54,7 +55,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
   // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
-  // 1. Завантаження даних (додано baseUrl)
+  // 1. Завантаження даних
   useEffect(() => {
     fetch(`${baseUrl}/api/tablets.json`)
       .then(res => res.json())
@@ -81,7 +82,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
     return <div className="loader">Loading...</div>;
   }
 
-  // Прибрано зайві дужки
   if (!findTablet) {
     return (
       <div className="container">
@@ -106,8 +106,22 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
     yellow: '#FAF569',
   };
 
-  const isFav = favourites.some(fav => fav.id === simpleInfo?.id);
-  const isAdded = cart.some(c => c.id === simpleInfo?.id);
+  // Перевіряємо, чи є товар у вибраному/кошику, використовуючи String()
+  const isFav = favourites.some(fav => String(fav.id) === String(simpleInfo?.id));
+  const isAdded = cart.some(c => String(c.id) === String(simpleInfo?.id));
+
+  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
+  const handleCartClick = () => {
+    if (!simpleInfo) return; // Запобіжник, якщо simpleInfo не знайдено
+
+    if (isAdded) {
+      // Якщо вже додано - видаляємо
+      removeItem(String(simpleInfo.id));
+    } else {
+      // Якщо не додано - додаємо
+      addToCart({ ...simpleInfo, id: String(simpleInfo.id), quantity: 1 });
+    }
+  };
 
   return (
     <div className="description-tablets-page container">
@@ -116,7 +130,6 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
         className="description-phones-page__back-button"
         onClick={() => navigate(-1)}
       >
-        {/* Додано baseUrl для стрілочки */}
         <img
           src={`${baseUrl}img/icons/Vector (Stroke).png`}
           alt="Back"
@@ -217,6 +230,7 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
           </div>
 
           <div className="description-tablets-page__top__buttons">
+            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
             <button
               type="button"
               className={`description-accessories-page__top__buttons__add-to ${
@@ -224,25 +238,23 @@ export const DescriptionTabletsPage: FC<Props> = ({ productsData = [] }) => {
                   ? 'description-accessories-page__top__buttons__add-to--active'
                   : ''
               }`}
-              onClick={() =>
-                simpleInfo && addToCart({ ...simpleInfo, quantity: 1 })
-              }
+              onClick={handleCartClick}
             >
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
+            {/* КНОПКА ВИБРАНОГО */}
             <button
               type="button"
               className="description-accessories-page__top__buttons__fav"
               onClick={() => simpleInfo && addToFav(simpleInfo)}
             >
-              {/* Додано baseUrl для іконки обраного */}
               <img
                 className="description-accessories-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
-                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
+                    ? `${baseUrl}/img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}/img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />

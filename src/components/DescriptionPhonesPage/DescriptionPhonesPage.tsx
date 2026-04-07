@@ -48,7 +48,8 @@ interface Props {
 export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  const { cart, addToCart } = useCart();
+  // ДІСТАЄМО removeItem
+  const { cart, addToCart, removeItem } = useCart();
   const { favourites, addToFav } = useFavourites();
 
   const [phones, setPhones] = useState<PhoneData[]>([]);
@@ -58,7 +59,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
   // Змінна для правильних шляхів на GitHub Pages
   const baseUrl = import.meta.env.BASE_URL;
 
-  // ЗАВАНТАЖЕННЯ ДАНИХ ЧЕРЕЗ FETCH (Тепер з baseUrl!)
+  // ЗАВАНТАЖЕННЯ ДАНИХ ЧЕРЕЗ FETCH
   useEffect(() => {
     fetch(`${baseUrl}/api/phones.json`)
       .then(res => res.json())
@@ -116,6 +117,17 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
     yellow: '#FAF569',
   };
 
+  // ФУНКЦІЯ ОБРОБКИ КЛІКУ ПО КОШИКУ
+  const handleCartClick = () => {
+    if (!simpleInfo) return;
+
+    if (isAdded) {
+      removeItem(String(simpleInfo.id));
+    } else {
+      addToCart({ ...simpleInfo, id: String(simpleInfo.id), quantity: 1 });
+    }
+  };
+
   // ОСНОВНИЙ РЕНДЕР СТОРІНКИ
   return (
     <div className="description-phones-page container">
@@ -125,7 +137,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
         onClick={() => navigate(-1)}
       >
         <img
-          src={`${baseUrl}img/icons/Vector (Stroke).png`}
+          src={`${baseUrl}/img/icons/Vector (Stroke).png`}
           alt="Back"
           className="description-phones-page__back-button__icon"
         />
@@ -219,6 +231,7 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
           </div>
 
           <div className="description-phones-page__top__buttons">
+            {/* КНОПКА ДОДАВАННЯ В КОШИК */}
             <button
               type="button"
               className={`description-phones-page__top__buttons__add-to ${
@@ -226,13 +239,12 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
                   ? 'description-phones-page__top__buttons__add-to--active'
                   : ''
               }`}
-              onClick={() =>
-                simpleInfo && addToCart({ ...simpleInfo, quantity: 1 })
-              }
+              onClick={handleCartClick}
             >
               {isAdded ? 'Added' : 'Add to cart'}
             </button>
 
+            {/* КНОПКА УЛЮБЛЕНИХ */}
             <button
               type="button"
               className="description-phones-page__top__buttons__fav"
@@ -242,8 +254,8 @@ export const DescriptionPhonesPage: FC<Props> = ({ productsData = [] }) => {
                 className="description-phones-page__top__buttons__add-to__icon"
                 src={
                   isFav
-                    ? `${baseUrl}img/icons/Favourites Filled (Heart Like).png`
-                    : `${baseUrl}img/icons/Favourites (Heart Like).png`
+                    ? `${baseUrl}/img/icons/Favourites Filled (Heart Like).png`
+                    : `${baseUrl}/img/icons/Favourites (Heart Like).png`
                 }
                 alt="Fav"
               />
